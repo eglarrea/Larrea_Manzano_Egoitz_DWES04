@@ -1,0 +1,88 @@
+------------------------------------------------------------------ GET ------------------------------------------------------------------
+Obtener todos los registros
+url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cines
+
+Obtener los datos de un cine por id
+url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cine/getCineById/1
+------------------------------------------------------------------ POST ------------------------------------------------------------------
+Alta de un cine con error
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cine/alta
+
+	data:
+	{
+	  "aaa":"Nuevo nombre",
+	  "mail":"nuevomail@mail.com"
+	}
+
+
+Alta de un cine con datos minimos con ok
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cine/alta
+
+	data:
+	{
+		"nombre": "Alta Cine Yelmo Megapark",
+		"salas": [
+			{
+				"idSala": 1,
+				"pelicula": "Los juegos del hambre"
+			}
+		]
+	}
+		
+Alta de un cine con datos completos con ok
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cine/alta
+
+	data:
+	{
+		"nombre": "Cine Yelmo Premium Artea Completo",
+		"direccion": "Peruri Auzoa, 33",
+		"mail": "mail@mail.com",
+		"telefono": "666666666",
+		"salas": [
+			{
+				"idSala": 1,
+				"pelicula": "Los juegos del hambre",
+				"aforo": 100,
+				"es3d": true
+			},
+			{
+				"idSala": 2,
+				"pelicula": "La jungla de cristal",
+				"aforo": 100,
+				"es3d": true
+			}
+      ]
+	}
+------------------------------------------------------------------ PUT ------------------------------------------------------------------
+Actulizar pelicula del un cine que no existe
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cine/modificar/100
+
+	data:
+	{
+	  "salas":[{"idSala":1,"pelicula":"Los juegos del hambre Modificado"}]
+	}
+
+Actulizar pelicula del un cine que existe
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES04/api/v1/public/cine/modificar/1
+
+	data:
+	{
+	  "salas":[{"idSala":1,"pelicula":"Los juegos del hambre Modificado"}]
+	}
+
+
+Actulizar datos del cine
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES03/api/v1/public/cine/modificar/1
+
+	data:
+	{
+	  "nombre":"Nuevo nombre",
+	  "mail":"nuevomail@mail.com"
+	}
+
+
+
+------------------------------------------------------------------ DELETE ------------------------------------------------------------------
+Eliminar un cine
+
+	url: http://localhost:8080/Larrea_Manzano_Egoitz_DWES03/api/v1/public/cine/eliminar/2

@@ -1,0 +1,7 @@
+[{"ruta":"\/v1\/public","activa":true,"params":{"controller":"Home","action":"index","methodController":"index","methodType":"GET"}},
+{"ruta":"\/v1\/public\/cines","activa":true,"params":{"controller":"CinesController","action":"getAllData","methodController":"getAllData","methodType":"GET"}},
+{"ruta":"\/v1\/public\/cine\/getCineById\/{id}","activa":true,"params":{"controller":"CineController","action":"getCineById","methodController":"getDataByID","methodType":"GET"}},
+{"ruta":"\/v1\/public\/cine\/alta","activa":true,"params":{"controller":"CineController","action":"alta","methodController":"newData","methodType":"POST"}},
+{"ruta":"\/v1\/public\/cine\/modificar\/{id}","activa":true,"params":{"controller":"CineController","action":"actualizar","methodController":"updateData","methodType":"PUT"}},
+{"ruta":"\/v1\/public\/cine\/eliminar\/{id}","activa":true,"params":{"controller":"CineController","action":"eliminar","methodController":"deleteData","methodType":"DELETE"}}
+]

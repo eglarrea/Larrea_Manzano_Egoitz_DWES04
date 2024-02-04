@@ -15,7 +15,12 @@ class DataBase {
             $this->conexion=new PDO("mysql:host={$this->datosConfiguracion['host']};dbname={$this->datosConfiguracion['database']};charset=utf8",$this->datosConfiguracion['user'],$this->datosConfiguracion['password']);
             $this->conexion->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $ex) {
-            die(json_encode(array('outcome' => false, 'message' => 'Unable to connect')));
+            $respuesta=new Respuesta();
+            $respuesta->setStatusCode(ErrorCodes::HTTP_CODE_500);
+            $respuesta->setError(true);
+            $respuesta->setMensajeError("No se puede conectar con la BBDD");
+            $respuesta->setRespuesta("");
+            die($respuesta->enviarRespuesta());
         }
 
     }

@@ -61,18 +61,34 @@ function createCineForAdd($datos){
     if(existeElementoEnArray($datos,'salas')==true){
         $tempSalas=[];
         for ($a=0; $a<=sizeof($datos['salas'])-1;$a++){
-            if(existeElementoEnArray($datos['salas'][$a],'idSala')==true){
-                $sala=new SalaEntity($cine->getId(),$datos['salas'][$a]['idSala'],);
-                if(existeElementoEnArray($datos['salas'][$a],'pelicula')==true){
-                  $sala->setPelicula($datos['salas'][$a]['pelicula']);
-                 }
-                if(existeElementoEnArray($datos['salas'][$a],'aforo')==true){
-                    $sala->setAforo($datos['salas'][$a]['aforo']);
+            if(is_array($datos['salas'][$a])){
+                if(existeElementoEnArray($datos['salas'][$a],'idSala')==true){
+                    $sala=new SalaEntity($cine->getId(),$datos['salas'][$a]['idSala'],);
+                    if(existeElementoEnArray($datos['salas'][$a],'pelicula')==true){
+                    $sala->setPelicula($datos['salas'][$a]['pelicula']);
+                    }
+                    if(existeElementoEnArray($datos['salas'][$a],'aforo')==true){
+                        $sala->setAforo($datos['salas'][$a]['aforo']);
+                    }
+                    if(existeElementoEnArray($datos['salas'][$a],'es3d')==true){
+                    $sala->setEs3d($datos['salas'][$a]['es3d']);
+                    }
+                    array_push($tempSalas,$sala);
                 }
-                if(existeElementoEnArray($datos['salas'][$a],'es3d')==true){
-                 $sala->setEs3d($datos['salas'][$a]['es3d']);
+            }else{
+                if(existeElementoEnArray($datos['salas'],'idSala')==true){
+                    $sala=new SalaEntity($cine->getId(),$datos['salas']['idSala'],);
+                    if(existeElementoEnArray($datos['salas'],'pelicula')==true){
+                    $sala->setPelicula($datos['salas']['pelicula']);
+                    }
+                    if(existeElementoEnArray($datos['salas'],'aforo')==true){
+                        $sala->setAforo($datos['salas']['aforo']);
+                    }
+                    if(existeElementoEnArray($datos['salas'],'es3d')==true){
+                    $sala->setEs3d($datos['salas']['es3d']);
+                    }
+                    array_push($tempSalas,$sala);
                 }
-                array_push($tempSalas,$sala);
             }
         }
         $cine->setSalas($tempSalas);

@@ -61,7 +61,10 @@ function createCineForAdd($datos){
     if(existeElementoEnArray($datos,'salas')==true){
         $tempSalas=[];
         for ($a=0; $a<=sizeof($datos['salas'])-1;$a++){
-            if(is_array($datos['salas'][$a])){
+            //Si es un array con varias salas
+           // if(is_array(null!=$datos['salas'][$a])){
+                if(!is_assoc( $datos['salas'] )){
+                
                 if(existeElementoEnArray($datos['salas'][$a],'idSala')==true){
                     $sala=new SalaEntity($cine->getId(),$datos['salas'][$a]['idSala'],);
                     if(existeElementoEnArray($datos['salas'][$a],'pelicula')==true){
@@ -76,6 +79,7 @@ function createCineForAdd($datos){
                     array_push($tempSalas,$sala);
                 }
             }else{
+                 //Si es una única sala
                 if(existeElementoEnArray($datos['salas'],'idSala')==true){
                     $sala=new SalaEntity($cine->getId(),$datos['salas']['idSala'],);
                     if(existeElementoEnArray($datos['salas'],'pelicula')==true){
@@ -88,12 +92,17 @@ function createCineForAdd($datos){
                     $sala->setEs3d($datos['salas']['es3d']);
                     }
                     array_push($tempSalas,$sala);
+                    break;
                 }
             }
         }
         $cine->setSalas($tempSalas);
     }
  }
+
+ function is_assoc( $array ) {
+	return array_keys( $array ) !== range( 0, count($array) - 1 );
+}
 ?>
 
 

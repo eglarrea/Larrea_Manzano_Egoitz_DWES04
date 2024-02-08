@@ -14,14 +14,11 @@ class SalaDao extends Dao{
 
         $idCine= $enitytSala->getIdCine();
         $idSala = $enitytSala->getIdSala();
-        $sentencia->bindParam(':idCine',  $idCine);
-        $sentencia->bindParam(':idSala',  $idSala);
-        $valorParametro=$enitytSala->getPelicula();
-        $sentencia->bindParam(':pelicula', $valorParametro);
-        $valorParametro1=$enitytSala->getAforo();
-        $sentencia->bindParam(':aforo', $valorParametro1);
-        $valorParametro2=$enitytSala->getEs3d();
-        $sentencia->bindParam(':es3d', $valorParametro2);
+        $sentencia->bindValue(':idCine',  $idCine);
+        $sentencia->bindValue(':idSala',  $idSala);
+        $sentencia->bindValue(':pelicula', $enitytSala->getPelicula());
+        $sentencia->bindValue(':aforo', $enitytSala->getAforo());
+        $sentencia->bindValue(':es3d', $enitytSala->getEs3d());
         $sentencia->execute();
         $retorno=$sentencia->rowCount();
 
@@ -40,31 +37,27 @@ class SalaDao extends Dao{
         $idCine= $enitytSala->getIdCine();
         $idSala = $enitytSala->getIdSala();
 
-        $sentencia->bindParam(':idCine',  $idCine);
-        $sentencia->bindParam(':idSala',  $idSala);
+        $sentencia->bindValue(':idCine',  $idCine);
+        $sentencia->bindValue(':idSala',  $idSala);
         
 
         if (null!=$enitytSala->getPelicula()){
-            $valorParametro=$enitytSala->getPelicula();
-            $sentencia->bindParam(':pelicula', $valorParametro);
+            $sentencia->bindValue(':pelicula', $enitytSala->getPelicula());
             $setcomma=',';
         }
         
         if (null!=$enitytSala->getAforo()){
             $setValues=$setValues.$setcomma;
-            $valorParametro1=$enitytSala->getAforo();
-            $sentencia->bindParam(':aforo', $valorParametro1);
+            $sentencia->bindValue(':aforo', $enitytSala->getAforo());
             $setcomma=',';
         }
         
         if (null!=$enitytSala->getEs3d()){
             $setValues=$setValues.$setcomma;
-            $valorParametro2=$enitytSala->getEs3d();
-            $sentencia->bindParam(':es3d', $valorParametro2);
-           
+            $sentencia->bindValue(':es3d', $enitytSala->getEs3d());
         }
        
-        $sentencia->execute();
+        $actual=$sentencia->execute();
         $retorno=$sentencia->rowCount();
 
         if ($retorno >= 1){
@@ -77,7 +70,7 @@ class SalaDao extends Dao{
 
     public function getSalasByIdCine($idCine){
         $sentencia=$this->conexion->prepare("select * from  salas where idCine=:idCine");
-        $sentencia->bindParam(':idCine', $idCine);
+        $sentencia->bindValue(':idCine', $idCine);
         $sentencia->execute();
         $salas=$sentencia->fetchAll(PDO::FETCH_ASSOC);
         $salasCine=[];

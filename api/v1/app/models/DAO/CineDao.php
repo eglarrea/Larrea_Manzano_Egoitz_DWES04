@@ -41,13 +41,13 @@ class CineDao extends Dao{
             $sentencia=$this->conexion->prepare("insert into cines (nombre,direccion,mail,telefono) 
                                                 values (:nombre,:direccion,:mail,:telefono)");
             $valorParametro=$enitytCine->getNombre();
-            $sentencia->bindParam(':nombre', $valorParametro);                                    
+            $sentencia->bindValue(':nombre', $enitytCine->getNombre());                                    
             $valorParametro1=$enitytCine->getDireccion();
-            $sentencia->bindParam(':direccion', $valorParametro1);
+            $sentencia->bindValue(':direccion', $enitytCine->getDireccion());
             $valorParametro2=$enitytCine->getMail();
-            $sentencia->bindParam(':mail', $valorParametro2);
+            $sentencia->bindValue(':mail', $enitytCine->getMail());
             $valorParametro3=$enitytCine->getTelefono();
-            $sentencia->bindParam(':telefono', $valorParametro3);
+            $sentencia->bindValue(':telefono', $enitytCine->getTelefono());
             $sentencia->execute();
             $idCine= $this->conexion->lastInsertId();
 
@@ -77,32 +77,28 @@ class CineDao extends Dao{
             $sentencia=$this->conexion->prepare("update cines set ".$setValues. " where id=:id");
 
             $id = $enitytCine->getId();
-            $sentencia->bindParam(':id',  $id);
+            $sentencia->bindValue(':id',  $id);
 
-            if (null!=$enitytCine->getNombre()){
-                $valorParametro=$enitytCine->getNombre();
-                $sentencia->bindParam(':nombre', $valorParametro);
+            if (null!=$enitytCine->getNombre()){                
+                $sentencia->bindValue(':nombre', $enitytCine->getNombre());
                 $setcomma=',';
             }
             
             if (null!=$enitytCine->getDireccion()){
                 $setValues=$setValues.$setcomma;
-                $valorParametro1=$enitytCine->getDireccion();
-                $sentencia->bindParam(':direccion', $valorParametro1);
+                $sentencia->bindValue(':direccion', $enitytCine->getDireccion());
                 $setcomma=',';
             }
             
             if (null!=$enitytCine->getMail()){
                 $setValues=$setValues.$setcomma;
-                $valorParametro2=$enitytCine->getMail();
-                $sentencia->bindParam(':mail', $valorParametro2);
+                $sentencia->bindValue(':mail', $enitytCine->getMail());
                 $setcomma=',';
             }
         
             if (null!=$enitytCine->getTelefono()){
                 $setValues=$setValues.$setcomma;
-                $valorParametro3=$enitytCine->getTelefono();
-                $sentencia->bindParam(':telefono', $valorParametro3);
+                $sentencia->bindValue(':telefono', $enitytCine->getTelefono());
             }
 
             $sentencia->execute();
@@ -187,7 +183,7 @@ class CineDao extends Dao{
         try{
             $this->conexion->beginTransaction();
             $sentencia=$this->conexion->prepare("delete from cines where id=:id");
-            $sentencia->bindParam(':id', $id);
+            $sentencia->bindValue(':id', $id);
             $sentencia->execute();
             $retorno=$sentencia->rowCount();
             $this->conexion->commit();

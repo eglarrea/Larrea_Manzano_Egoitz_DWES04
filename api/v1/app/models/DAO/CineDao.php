@@ -1,30 +1,32 @@
 <?php
 require("../app/models/DTO/CineDTO.php");
 class CineDao extends Dao{
-    private $ddbbConexionSala;
+    private $salaDao;
     public function __construct(){
         parent::__construct();
-        $this->ddbbConexionSala =new SalaDao();
+        $this->salaDao =new SalaDao();
     }
 
+     //Funcion para obtener todos los cines
     public function getAllCines(){
         $sentencia=$this->conexion->query("select * from  cines");
         $listaCines=$sentencia->fetchAll(PDO::FETCH_ASSOC);
         $cinesDTO=array();
         for ($i=0; $i < count($listaCines); $i++) { 
             $fila=$listaCines[$i];
-            $salas=$this->ddbbConexionSala->getSalasByIdCine($fila['id']);
+            $salas=$this->salaDao->getSalasByIdCine($fila['id']);
             $cine= new CineDTO($fila['id'],$fila['nombre'],$fila['direccion'],$fila['mail'],$fila['telefono'],$salas);
             array_push($cinesDTO,$cine);
         }
        return $cinesDTO;
     }
 
+    //Funcion para obtener los datos de un cine por id
     public function getCineById($id){
         $sentencia=$this->conexion->prepare("select * from  cines where id=:id");
         $sentencia->bindParam(':id', $id);
         $sentencia->execute();
-        $salas=$this->ddbbConexionSala->getSalasByIdCine( $id);
+        $salas=$this->salaDao->getSalasByIdCine( $id);
 
         $detalleCine=$sentencia->fetchAll(PDO::FETCH_ASSOC);
         $cine=null;
@@ -35,6 +37,7 @@ class CineDao extends Dao{
         return $cine;
     }
 
+    //Funcion para añadir un nuevo cine con salas
     public function addCine($enitytCine){
         try{
             $this->conexion->beginTransaction();
@@ -56,7 +59,7 @@ class CineDao extends Dao{
             if(null!= $salas){
                 for ($a=0; $a<=sizeof($salas)-1;$a++){
                     $salas[$a]->setIdCine($idCine);
-                    $retornoSala=$this->ddbbConexionSala-> addSala($salas[$a]);
+                    $retornoSala=$this->salaDao-> addSala($salas[$a]);
                 }
             }
             $this->conexion->commit();
@@ -67,6 +70,7 @@ class CineDao extends Dao{
         return false;
     }
     
+    //Funcion para actualizar los datos del cine y/o sala
     public function updateCine($enitytCine){
         $actualizado=0;
         $salaActualizado=false;
@@ -76,8 +80,8 @@ class CineDao extends Dao{
         if($setValues!=''){
             $sentencia=$this->conexion->prepare("update cines set ".$setValues. " where id=:id");
 
-            $id = $enitytCine->getId();
-            $sentencia->bindValue(':id',  $id);
+            //$id = $enitytCine->getId();
+            $sentencia->bindValue(':id', $enitytCine->getId());
 
             if (null!=$enitytCine->getNombre()){                
                 $sentencia->bindValue(':nombre', $enitytCine->getNombre());
@@ -106,12 +110,20 @@ class CineDao extends Dao{
         }
 
         $salas= $enitytCine->getSalas();
-       
+       //Si hay salas para actualizar 
         if(null!= $salas){
-            for ($a=0; $a<=sizeof($salas)-1;$a++){
-                $retornoSala=$this->ddbbConexionSala->updateSala($salas[$a]);
-                if(!$salaActualizado){
-                    $salaActualizado=$retornoSala;
+            $numeroSalas=sizeof($salas);
+            $salasActualizadas=0;
+            for ($a=0; $a<=$numeroSalas-1;$a++){
+                $existeSala=$this->salaDao->getSalasByIdCineAndIdSala($enitytCine->getId(), $salas[$a]->getIdSala());
+                if(null!=$existeSala){
+                    $retornoSala=$this->salaDao->updateSala($salas[$a]);
+                    if($retornoSala){
+                        $salasActualizadas =$salasActualizadas +1;
+                    }
+                    if($salasActualizadas==$numeroSalas){
+                        $salaActualizado=false;
+                    }
                 }
             }
         }
@@ -125,6 +137,7 @@ class CineDao extends Dao{
        return $retorno; 
     }
 
+    //Funcion para crear la update dinamica segun los valores informados
     private function setValuesUpdate($enitytCine){
         $setValues='';
         $setcomma='';
@@ -152,33 +165,7 @@ class CineDao extends Dao{
         return $setValues;
     }
 
-    private function setValuesInsert($enitytCine){
-        $setValues='';
-        $setcomma='';
-        if (null!=$enitytCine->getNombre()){
-            $setValues=$setValues.' nombre=:nombre';
-            $setcomma=',';
-        }
-        
-        if (null!=$enitytCine->getDireccion()){
-            $setValues=$setValues.$setcomma;
-            $setValues=$setValues.' direccion=:direccion';
-            $setcomma=',';
-        }
-        
-        if (null!=$enitytCine->getMail()){
-            $setValues=$setValues.$setcomma;
-            $setValues=$setValues.' mail=:mail';
-            $setcomma=',';
-        }
-       
-        if (null!=$enitytCine->getTelefono()){
-            $setValues=$setValues.$setcomma;
-            $setValues=$setValues.' telefono=:telefono';
-        }
-        return $setValues;
-    }
-
+    //Metodo para eliminar un cine
     public function deleteCine($id){
         try{
             $this->conexion->beginTransaction();
@@ -199,7 +186,5 @@ class CineDao extends Dao{
     }
 
 }
-
-
 
 ?>

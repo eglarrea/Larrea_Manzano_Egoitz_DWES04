@@ -34,11 +34,11 @@ class SalaDao extends Dao{
        
         $sentencia=$this->conexion->prepare("update salas set ".$setValues. " where idCine=:idCine and idSala=:idSala ");
 
-        $idCine= $enitytSala->getIdCine();
-        $idSala = $enitytSala->getIdSala();
+       /* $idCine= $enitytSala->getIdCine();
+        $idSala = $enitytSala->getIdSala();*/
 
-        $sentencia->bindValue(':idCine',  $idCine);
-        $sentencia->bindValue(':idSala',  $idSala);
+        $sentencia->bindValue(':idCine',  $enitytSala->getIdCine());
+        $sentencia->bindValue(':idSala',  $enitytSala->getIdSala());
         
 
         if (null!=$enitytSala->getPelicula()){
@@ -56,7 +56,7 @@ class SalaDao extends Dao{
             $setValues=$setValues.$setcomma;
             $sentencia->bindValue(':es3d', $enitytSala->getEs3d());
         }
-       
+      
         $actual=$sentencia->execute();
         $retorno=$sentencia->rowCount();
 
@@ -80,6 +80,36 @@ class SalaDao extends Dao{
             array_push($salasCine,$sala);
         }
         return $salasCine;
+    }
+
+    public function getSalasByIdCineAndIdSala($idCine, $idSala){
+        $sentencia=$this->conexion->prepare("select * from  salas where idCine=:idCine and idSala=:idSala");
+        $sentencia->bindValue(':idCine', $idCine);
+        $sentencia->bindValue(':idSala', $idSala);
+        $sentencia->execute();
+        $salas=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+        $sala=null;
+        for ($i=0; $i < count($salas); $i++) { 
+            $fila=$salas[$i];
+            $sala= new SalaDTO($fila['idSala'],$fila['pelicula'],$fila['aforo'],$fila['es3d']);
+          //  array_push($salasCine,$sala);
+        }
+        return  $sala;
+
+
+
+     /*   $sentencia=$this->conexion->prepare("select * from  cines where id=:id");
+        $sentencia->bindParam(':id', $id);
+        $sentencia->execute();
+        $salas=$this->salaDao->getSalasByIdCine( $id);
+
+        $detalleCine=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+        $cine=null;
+        for ($i=0; $i < count($detalleCine); $i++) { 
+            $fila=$detalleCine[$i];
+            $cine= new CineDTO($fila['id'],$fila['nombre'],$fila['direccion'],$fila['mail'],$fila['telefono'],$salas);
+        }
+        return $cine;*/
     }
 
 

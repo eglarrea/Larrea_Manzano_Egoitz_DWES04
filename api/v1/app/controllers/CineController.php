@@ -89,18 +89,25 @@ class CineController implements Controller{
     function updateData($id,$datos){
         $respuesta=new Respuesta();
         if(!is_null($id) && is_numeric($id)){
-            $cineEntity=createCineForUpdate($id,$datos);
-            //$cineEntity=updateCine($id,$datos);
-            $actualizado=$this->ddbbConexionCine->updateCine($cineEntity);
-            if($actualizado){
-                $respuesta->setStatusCode(ErrorCodes::HTTP_CODE_200);
-                $respuesta->setError(false);
-                $respuesta->setMensajeError("El registro con id: ".$id." se ha actualizado correctamente");
-                $respuesta->setRespuesta("");
+            $existeCine=$this->ddbbConexionCine->getCineById($id);
+            if(null!=$existeCine){
+                $cineEntity=createCineForUpdate($id,$datos);
+                $actualizado=$this->ddbbConexionCine->updateCine($cineEntity);
+                if($actualizado){
+                    $respuesta->setStatusCode(ErrorCodes::HTTP_CODE_200);
+                    $respuesta->setError(false);
+                    $respuesta->setMensajeError("El registro con id: ".$id." se ha actualizado correctamente");
+                    $respuesta->setRespuesta("");
+                }else{
+                    $respuesta->setStatusCode(ErrorCodes::HTTP_CODE_200);
+                    $respuesta->setError(true);
+                    $respuesta->setMensajeError("El registro no se ha encontrado o no se ha actualizado");
+                    $respuesta->setRespuesta("");
+                }
             }else{
                 $respuesta->setStatusCode(ErrorCodes::HTTP_CODE_200);
                 $respuesta->setError(true);
-                $respuesta->setMensajeError("El registro no se ha encontrado o no se ha actualizado");
+                $respuesta->setMensajeError("El registro no se existe y no se puede actualizar");
                 $respuesta->setRespuesta("");
             }
         }else{

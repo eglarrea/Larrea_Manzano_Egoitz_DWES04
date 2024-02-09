@@ -29,6 +29,6 @@ CREATE TABLE `salas` (
 
 INSERT INTO `cines` VALUES (1,'Artea','direccion1','nuevomail@mail.com','999');
 INSERT INTO `cines` VALUES (2,'Deportivo de getxo','DIRECCION1','MAIL','TELEFONO');
-INSERT INTO `salas` VALUES (1,1,'Los juegos del hambre Modificado',100,1);
-INSERT INTO `salas` VALUES (1,2,'pelicula',100,1);
-INSERT INTO `salas` VALUES (2,1,'Los juegos del hambre2',NULL,NULL);
+INSERT INTO `salas` VALUES (1,1,'Pelicula 1 cine artea',100,1);
+INSERT INTO `salas` VALUES (1,2,'Pelicula 1 cine getxo',100,1);
+INSERT INTO `salas` VALUES (2,1,'Pelicula 2 cine getxo',NULL,NULL);

@@ -122,7 +122,7 @@ class CineDao extends Dao{
                         $salasActualizadas =$salasActualizadas +1;
                     }
                     if($salasActualizadas==$numeroSalas){
-                        $salaActualizado=false;
+                        $salaActualizado=true;
                     }
                 }
             }

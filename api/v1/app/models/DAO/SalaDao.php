@@ -57,7 +57,7 @@ class SalaDao extends Dao{
             $sentencia->bindValue(':es3d', $enitytSala->getEs3d());
         }
       
-        $actual=$sentencia->execute();
+        $sentencia->execute();
         $retorno=$sentencia->rowCount();
 
         if ($retorno >= 1){

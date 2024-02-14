@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `dwesbd04` ;
-USE `dwesbd04`;
+CREATE DATABASE  IF NOT EXISTS `larrea_manzano_egoitz_dwes04` ;
+USE `larrea_manzano_egoitz_dwes04`;
 
 DROP TABLE IF EXISTS `salas`;
 DROP TABLE IF EXISTS `cines`;
